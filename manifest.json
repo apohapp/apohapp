@@ -1,11 +1,11 @@
 {
-  "name": "RELEVAPP Pro",
+  "name": "RELEVAPP",
   "short_name": "RELEVAPP",
-  "description": "Gestor de presupuestos y lista de materiales.",
+  "description": "Tu creador de presupuestos.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#333333",
+  "theme_color": "#0f172a",
   "icons": [
     {
       "src": "./icono-192.png",
