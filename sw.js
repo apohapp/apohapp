@@ -1,4 +1,4 @@
-const CACHE_NAME = 'relevapp-v2';
+const CACHE_NAME = 'apohapp-v2';
 const urlsToCache = [
   './',
   './index.html',

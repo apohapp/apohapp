@@ -1,6 +1,6 @@
 {
-  "name": "RELEVAPP",
-  "short_name": "RELEVAPP",
+  "name": "ApohAPP",
+  "short_name": "ApohAPP",
   "description": "Tu creador de presupuestos.",
   "start_url": "./index.html",
   "display": "standalone",
