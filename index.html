@@ -4,20 +4,23 @@
     <meta charset="UTF-8">
     <!-- Ajuste crucial para móviles: Evita el auto-zoom al tocar inputs -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ApohAPP Pro v9.5</title>
+    <title>ApohAPP Pro v9.6</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- LIBRERÍA MOTOR DE PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <style>
+        /* Estilos de Impresión estándar (PC) */
         @media print {
             @page { margin: 1.5cm; }
             body { background: white !important; color: black !important; font-size: 11pt; -webkit-print-color-adjust: exact; }
             .no-print { display: none !important; }
             .print-only { display: block !important; }
             
-            /* Limpieza de contenedores para papel */
             main { padding: 0 !important; max-width: 100% !important; margin: 0 !important; }
             section { box-shadow: none !important; border: none !important; padding: 0 !important; margin-bottom: 20px !important; background: transparent !important; }
             
-            /* Transformar inputs en texto plano */
             input, select, textarea { 
                 border: none !important; 
                 background: transparent !important; 
@@ -30,25 +33,49 @@
                 margin: 0 !important;
             }
             
-            /* Estilo del encabezado de la Tabla */
             .bg-slate-800 { background-color: transparent !important; color: black !important; padding: 0 !important; }
             .bg-slate-800 h2 { font-size: 14pt !important; color: black !important; width: 100%; border-bottom: 2px solid black; padding-bottom: 8px; margin-bottom: 10px; }
             
-            /* Estructura limpia de la Tabla */
             table { width: 100% !important; border-collapse: collapse !important; }
             thead tr { background-color: transparent !important; border-bottom: 1px solid black !important; }
             th { color: black !important; font-size: 10pt !important; padding: 8px 4px !important; }
             tbody tr { border-bottom: 1px solid #e5e7eb !important; background: transparent !important; }
             td { color: black !important; font-size: 10pt !important; padding: 8px 4px !important; }
             
-            /* Ajustes de totales */
             .bg-slate-50 { background-color: transparent !important; padding: 0 !important; }
             .border-t-2 { border-top: 2px solid black !important; }
             .text-blue-700 { color: black !important; }
             
-            /* Ocultar vistas no activas */
             #view-home { display: none !important; }
         }
+        
+        /* Estilos específicos para exportación nativa PDF (Móvil) */
+        body.pdf-mode { background: white !important; color: black !important; font-size: 11pt; }
+        body.pdf-mode .no-print { display: none !important; }
+        body.pdf-mode .print-only { display: block !important; }
+        body.pdf-mode main { padding: 0 !important; max-width: 100% !important; margin: 0 !important; }
+        body.pdf-mode section { box-shadow: none !important; border: none !important; padding: 0 !important; margin-bottom: 20px !important; background: transparent !important; page-break-inside: avoid; }
+        body.pdf-mode input, body.pdf-mode select, body.pdf-mode textarea { 
+            border: none !important; 
+            background: transparent !important; 
+            box-shadow: none !important;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            color: black !important;
+            pointer-events: none;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        body.pdf-mode .bg-slate-800 { background-color: transparent !important; color: black !important; padding: 0 !important; }
+        body.pdf-mode .bg-slate-800 h2 { font-size: 14pt !important; color: black !important; width: 100%; border-bottom: 2px solid black; padding-bottom: 8px; margin-bottom: 10px; }
+        body.pdf-mode table { width: 100% !important; border-collapse: collapse !important; }
+        body.pdf-mode thead tr { background-color: transparent !important; border-bottom: 1px solid black !important; }
+        body.pdf-mode th { color: black !important; font-size: 10pt !important; padding: 8px 4px !important; }
+        body.pdf-mode tbody tr { border-bottom: 1px solid #e5e7eb !important; background: transparent !important; page-break-inside: avoid; }
+        body.pdf-mode td { color: black !important; font-size: 10pt !important; padding: 8px 4px !important; }
+        body.pdf-mode .bg-slate-50 { background-color: transparent !important; padding: 0 !important; }
+        body.pdf-mode .border-t-2 { border-top: 2px solid black !important; }
+        body.pdf-mode .text-blue-700 { color: black !important; }
         
         .print-only { display: none; }
         input[type=number]::-webkit-inner-spin-button, 
@@ -111,7 +138,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
-                    ApohAPP Pro <span class="text-[7px] md:text-[8px] leading-none bg-blue-500 px-1 py-[2px] rounded-sm ml-0.5 font-bold self-end mb-[2px] md:mb-[4px]">v9.5</span>
+                    ApohAPP Pro <span class="text-[7px] md:text-[8px] leading-none bg-blue-500 px-1 py-[2px] rounded-sm ml-0.5 font-bold self-end mb-[2px] md:mb-[4px]">v9.6</span>
                 </h1>
             </div>
 
@@ -121,11 +148,12 @@
                     <span class="text-[10px] uppercase font-bold text-slate-400">Progreso Red:</span>
                     <span id="global-net-counter" class="text-xs font-black text-white">0 / 0</span>
                 </div>
-                <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 px-3 py-2 md:px-4 md:py-2 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 text-sm shadow-md" title="Exportar / Imprimir">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                <!-- NUEVO BOTÓN GENERAR PDF -->
+                <button id="btn-export" onclick="generatePDF()" class="bg-blue-600 hover:bg-blue-700 px-3 py-2 md:px-4 md:py-2 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 text-sm shadow-md" title="Exportar / Imprimir PDF">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    <span class="hidden md:inline">Exportar / Imprimir</span>
+                    <span class="hidden md:inline" id="btn-export-text">Guardar PDF</span>
                 </button>
             </div>
         </div>
@@ -1568,7 +1596,6 @@
                 document.getElementById('view-home').style.display = 'none';
                 document.getElementById('view-module-redes').classList.remove('hidden');
                 
-                // Mostrar botones de cabecera
                 const btnBack = document.getElementById('btn-back');
                 if(btnBack) {
                     btnBack.classList.remove('hidden');
@@ -1587,7 +1614,6 @@
                     alertBox.classList.remove('flex');
                 }
             } else {
-                // Muestra alerta para los módulos en construcción
                 const alertBox = document.getElementById('construction-alert');
                 if(alertBox) {
                     alertBox.classList.remove('hidden');
@@ -1604,7 +1630,6 @@
             document.getElementById('view-module-redes').classList.add('hidden');
             document.getElementById('view-home').style.display = 'block';
             
-            // Ocultar botones de cabecera
             const btnBack = document.getElementById('btn-back');
             if(btnBack) {
                 btnBack.classList.add('hidden');
@@ -1616,6 +1641,73 @@
                 headerActions.classList.add('hidden');
                 headerActions.classList.remove('flex');
             }
+        }
+
+        // ----------------------------------------------------
+        // NUEVO MOTOR PDF NATIVO (PARA MOVILES Y ESCRITORIO)
+        // ----------------------------------------------------
+        function generatePDF() {
+            const btnText = document.getElementById('btn-export-text');
+            const originalText = btnText ? btnText.innerText : 'Guardar PDF';
+            if (btnText) btnText.innerText = 'Generando...';
+
+            // 1. Sincronizar todos los inputs y selectores (html2canvas no los lee si no están como atributos)
+            document.querySelectorAll('#view-module-redes input').forEach(el => {
+                if(el.type === 'checkbox' || el.type === 'radio') {
+                    if(el.checked) el.setAttribute('checked', 'checked');
+                    else el.removeAttribute('checked');
+                } else {
+                    el.setAttribute('value', el.value);
+                }
+            });
+            document.querySelectorAll('#view-module-redes textarea').forEach(el => {
+                el.innerText = el.value;
+            });
+            document.querySelectorAll('#view-module-redes select').forEach(el => {
+                el.querySelectorAll('option').forEach(opt => {
+                    if(opt.selected) opt.setAttribute('selected', 'selected');
+                    else opt.removeAttribute('selected');
+                });
+            });
+
+            // 2. Activar la clase de renderizado limpio de PDF
+            document.body.classList.add('pdf-mode');
+
+            const element = document.getElementById('view-module-redes');
+            
+            // 3. Forzar el ancho del contenedor a diseño de PC para que no se aprieten las tablas
+            const originalWidth = element.style.width;
+            const originalMaxWidth = element.style.maxWidth;
+            element.style.width = '1000px';
+            element.style.maxWidth = 'none';
+
+            // 4. Configurar opciones del generador
+            const clientInput = document.getElementById('client-name');
+            const clientName = clientInput && clientInput.value ? clientInput.value.trim().replace(/[^a-zA-Z0-9]/g, '_') : 'Proyecto';
+            
+            const opt = {
+                margin:       10,
+                filename:     `ApohAPP_${clientName}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, windowWidth: 1000 }, // El windowWidth es clave para moviles
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            // 5. Procesar y guardar
+            html2pdf().set(opt).from(element).save().then(() => {
+                document.body.classList.remove('pdf-mode');
+                element.style.width = originalWidth;
+                element.style.maxWidth = originalMaxWidth;
+                if (btnText) btnText.innerText = originalText;
+            }).catch(err => {
+                console.error("Error al generar PDF: ", err);
+                document.body.classList.remove('pdf-mode');
+                element.style.width = originalWidth;
+                element.style.maxWidth = originalMaxWidth;
+                if (btnText) btnText.innerText = originalText;
+                alert("Error al generar PDF. Por favor, revisa tu conexión o intenta de nuevo.");
+            });
         }
 
 
