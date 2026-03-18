@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <!-- Ajuste crucial para móviles: Evita el auto-zoom al tocar inputs -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ApohAPP Pro v9.7</title>
+    <title>ApohAPP Pro v9.8</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- LIBRERÍA MOTOR DE PDF -->
@@ -140,7 +140,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
-                    ApohAPP Pro <span class="text-[7px] md:text-[8px] leading-none bg-blue-500 px-1 py-[2px] rounded-sm ml-0.5 font-bold self-end mb-[2px] md:mb-[4px]">v9.7</span>
+                    ApohAPP Pro <span class="text-[7px] md:text-[8px] leading-none bg-blue-500 px-1 py-[2px] rounded-sm ml-0.5 font-bold self-end mb-[2px] md:mb-[4px]">v9.8</span>
                 </h1>
             </div>
 
@@ -1393,6 +1393,109 @@
                             </div>
                         </div>
 
+                        <!-- BANDEJA METÁLICA -->
+                        <div class="bg-orange-50/50 p-3 border border-orange-100 rounded-lg">
+                            <label class="flex items-center gap-2 cursor-pointer mb-2">
+                                <input type="checkbox" id="include-tray-conduit" onchange="toggleTrayConduitSection()" class="w-4 h-4 text-orange-600 rounded shrink-0">
+                                <span class="text-[9px] md:text-[10px] font-bold text-slate-700 uppercase leading-tight">Incluir Bandeja Metálica</span>
+                            </label>
+
+                            <div id="tray-conduit-container" class="space-y-3 hidden border-t border-orange-200 pt-3">
+                                <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+                                    <div class="sm:col-span-6">
+                                        <label class="block text-[8px] font-bold text-slate-500 uppercase mb-1">Tipo de Canalizado</label>
+                                        <select id="tray-conduit-type" class="w-full p-2 border border-orange-200 rounded-lg text-[10px] font-bold bg-slate-50" disabled>
+                                            <option value="Bandeja Portacable Ranurada">Bandeja Portacable Ranurada</option>
+                                        </select>
+                                    </div>
+                                    <div class="sm:col-span-6">
+                                        <label class="block text-[8px] font-bold text-slate-500 uppercase mb-1">Medida</label>
+                                        <select id="tray-conduit-size" onchange="updateTrayAccessoriesSize()" class="w-full p-2 border border-orange-200 rounded-lg text-[10px] font-bold bg-white">
+                                            <option value="38x38mm">38x38mm</option>
+                                            <option value="60x40mm">60x40mm</option>
+                                            <option value="100x50mm">100x50mm</option>
+                                            <option value="150x50mm">150x50mm</option>
+                                            <option value="200x50mm">200x50mm</option>
+                                            <option value="300x50mm">300x50mm</option>
+                                            <option value="450x50mm">450x50mm</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-white p-2 rounded-lg border border-orange-100 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block text-[8px] font-bold text-slate-500 uppercase mb-1">Montaje en</label>
+                                        <select id="tray-conduit-surface" class="w-full p-2 border border-orange-200 rounded-lg text-[10px] font-bold bg-slate-50">
+                                            <option value="Mampostería">Mampost. / Concreto</option>
+                                            <option value="Metal">Estruc. Metálica</option>
+                                        </select>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block text-[8px] font-bold text-slate-500 uppercase mb-1">Cant. Unid. (3m)</label>
+                                            <input type="number" id="tray-conduit-units" data-length="3" min="0" value="0" oninput="calculateTrayMeters()" class="w-full p-2 border border-orange-200 rounded-lg text-center font-bold text-xs bg-white" placeholder="0">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[8px] font-bold text-slate-500 uppercase mb-1">Metros (Info)</label>
+                                            <input type="text" id="tray-meters-display" readonly value="0 m" class="w-full p-2 border border-orange-100 rounded-lg text-center font-bold text-xs bg-orange-100 text-orange-800 cursor-not-allowed">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Accesorios de Bandeja -->
+                                <div class="bg-white p-3 rounded-lg border border-orange-200 shadow-sm mt-3">
+                                    <label class="block text-[9px] font-black text-orange-600 uppercase mb-2">Accesorios (<span class="tray-size-label">38x38mm</span>)</label>
+                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                        <div>
+                                            <label class="block text-[8px] font-bold text-slate-500 uppercase mb-1">Unión de bandeja</label>
+                                            <input type="number" id="tray-acc-union" min="0" value="0" class="w-full p-1.5 border border-orange-200 rounded text-center font-bold text-xs bg-slate-50">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[8px] font-bold text-slate-500 uppercase mb-1">Curva Horiz. 90°</label>
+                                            <input type="number" id="tray-acc-curva-h" min="0" value="0" class="w-full p-1.5 border border-orange-200 rounded text-center font-bold text-xs bg-slate-50">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[8px] font-bold text-slate-500 uppercase mb-1">Derivación T</label>
+                                            <input type="number" id="tray-acc-te" min="0" value="0" class="w-full p-1.5 border border-orange-200 rounded text-center font-bold text-xs bg-slate-50">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[8px] font-bold text-slate-500 uppercase mb-1">Curva Vert. Ext.</label>
+                                            <input type="number" id="tray-acc-curva-ve" min="0" value="0" class="w-full p-1.5 border border-orange-200 rounded text-center font-bold text-xs bg-slate-50">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[8px] font-bold text-slate-500 uppercase mb-1">Curva Vert. Int.</label>
+                                            <input type="number" id="tray-acc-curva-vi" min="0" value="0" class="w-full p-1.5 border border-orange-200 rounded text-center font-bold text-xs bg-slate-50">
+                                        </div>
+                                        <div>
+                                            <label class="block text-[8px] font-bold text-slate-500 uppercase mb-1">Tapa de bandeja</label>
+                                            <input type="number" id="tray-acc-tapa" min="0" value="0" class="w-full p-1.5 border border-orange-200 rounded text-center font-bold text-xs bg-slate-50">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Soportes de Bandeja -->
+                                <div class="bg-white p-3 rounded-lg border border-orange-200 shadow-sm mt-3">
+                                    <label class="block text-[9px] font-black text-orange-600 uppercase mb-2">Soportes de Bandeja Ranurada</label>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <div class="flex items-center justify-between bg-slate-50 border border-slate-200 p-2 rounded">
+                                            <div>
+                                                <span class="block text-[8px] font-bold text-slate-600 uppercase">Ménsula Reforzada para</span>
+                                                <span class="tray-size-label text-[10px] font-black text-orange-600 uppercase block">38x38mm</span>
+                                            </div>
+                                            <input type="number" id="tray-sup-mensula" min="0" value="0" class="w-16 p-1.5 border border-orange-200 rounded text-center font-bold text-xs bg-white shrink-0 ml-2">
+                                        </div>
+                                        <div class="flex items-center justify-between bg-slate-50 border border-slate-200 p-2 rounded">
+                                            <div>
+                                                <span class="block text-[8px] font-bold text-slate-600 uppercase">Soporte Colgante para</span>
+                                                <span class="tray-size-label text-[10px] font-black text-orange-600 uppercase block">38x38mm</span>
+                                            </div>
+                                            <input type="number" id="tray-sup-colgante" min="0" value="0" class="w-16 p-1.5 border border-orange-200 rounded text-center font-bold text-xs bg-white shrink-0 ml-2">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- CAJAS DE PASO -->
                         <div class="bg-orange-50/50 p-3 border border-orange-100 rounded-lg">
                             <label class="flex items-center gap-2 cursor-pointer mb-2">
@@ -2174,6 +2277,9 @@
                 } else if (desc.includes('abrazadera')) {
                     totalAbrazaderas += item.quantity;
                     multiplier = 1;
+                } else if (desc.includes('soporte')) {
+                    // Ménsulas y Colgantes de bandeja
+                    multiplier = 2; 
                 }
 
                 if (multiplier > 0) {
@@ -2597,6 +2703,39 @@
             renderTable();
         }
 
+        function toggleTrayConduitSection() {
+            const checkbox = document.getElementById('include-tray-conduit');
+            const container = document.getElementById('tray-conduit-container');
+            if (checkbox && container) {
+                if (checkbox.checked) {
+                    container.classList.remove('hidden');
+                    updateTrayAccessoriesSize(); // sync initial text
+                } else {
+                    container.classList.add('hidden');
+                }
+            }
+        }
+
+        function calculateTrayMeters() {
+            const unitsEl = document.getElementById('tray-conduit-units');
+            const displayEl = document.getElementById('tray-meters-display');
+            if (!unitsEl || !displayEl) return;
+            
+            const units = parseInt(unitsEl.value) || 0;
+            const length = parseInt(unitsEl.dataset.length) || 3;
+            displayEl.value = (units * length) + " m";
+        }
+
+        function updateTrayAccessoriesSize() {
+            const sizeEl = document.getElementById('tray-conduit-size');
+            if (!sizeEl) return;
+            const size = sizeEl.value;
+            const labels = document.querySelectorAll('.tray-size-label');
+            labels.forEach(label => {
+                label.innerText = size;
+            });
+        }
+
         function updateConduitOptions(index) {
             const typeSelect = document.getElementById(`conduit-type-${index}`);
             if (!typeSelect) return;
@@ -2869,6 +3008,47 @@
                         itemAdded = true;
                     }
                 }
+            }
+
+            // BANDEJA METÁLICA
+            const includeTray = document.getElementById('include-tray-conduit');
+            if (includeTray && includeTray.checked) {
+                const unitsEl = document.getElementById('tray-conduit-units');
+                const units = unitsEl ? (parseInt(unitsEl.value) || 0) : 0;
+                const sizeEl = document.getElementById('tray-conduit-size');
+                const size = sizeEl ? sizeEl.value : '';
+                const surfaceEl = document.getElementById('tray-conduit-surface');
+                const surface = surfaceEl ? surfaceEl.value : 'Mampostería';
+                
+                if (units > 0) {
+                    pushConsolidated(`Bandeja Portacable Ranurada ${size}`, units, 'un', 0);
+                    if(unitsEl) unitsEl.value = 0;
+                    itemAdded = true;
+                }
+
+                // Accesorios de bandeja
+                const accUnion = parseInt(document.getElementById('tray-acc-union').value) || 0;
+                const accCurvaH = parseInt(document.getElementById('tray-acc-curva-h').value) || 0;
+                const accTe = parseInt(document.getElementById('tray-acc-te').value) || 0;
+                const accCurvaVe = parseInt(document.getElementById('tray-acc-curva-ve').value) || 0;
+                const accCurvaVi = parseInt(document.getElementById('tray-acc-curva-vi').value) || 0;
+                const accTapa = parseInt(document.getElementById('tray-acc-tapa').value) || 0;
+                
+                if (accUnion > 0) { pushConsolidated(`Unión de Bandeja Portacable Ranurada ${size}`, accUnion, 'un', 0, surface); document.getElementById('tray-acc-union').value = 0; itemAdded = true; }
+                if (accCurvaH > 0) { pushConsolidated(`Curva Horizontal 90° Bandeja Ranurada ${size}`, accCurvaH, 'un', 0, surface); document.getElementById('tray-acc-curva-h').value = 0; itemAdded = true; }
+                if (accTe > 0) { pushConsolidated(`Derivación T Bandeja Ranurada ${size}`, accTe, 'un', 0, surface); document.getElementById('tray-acc-te').value = 0; itemAdded = true; }
+                if (accCurvaVe > 0) { pushConsolidated(`Curva Vertical Externa Bandeja Ranurada ${size}`, accCurvaVe, 'un', 0, surface); document.getElementById('tray-acc-curva-ve').value = 0; itemAdded = true; }
+                if (accCurvaVi > 0) { pushConsolidated(`Curva Vertical Interna Bandeja Ranurada ${size}`, accCurvaVi, 'un', 0, surface); document.getElementById('tray-acc-curva-vi').value = 0; itemAdded = true; }
+                if (accTapa > 0) { pushConsolidated(`Tapa de Bandeja Ranurada ${size}`, accTapa, 'un', 0, surface); document.getElementById('tray-acc-tapa').value = 0; itemAdded = true; }
+
+                // Soportes de bandeja
+                const supMensula = parseInt(document.getElementById('tray-sup-mensula').value) || 0;
+                const supColgante = parseInt(document.getElementById('tray-sup-colgante').value) || 0;
+
+                if (supMensula > 0) { pushConsolidated(`Soporte Ménsula Reforzada para ${size}`, supMensula, 'un', 0, surface); document.getElementById('tray-sup-mensula').value = 0; itemAdded = true; }
+                if (supColgante > 0) { pushConsolidated(`Soporte Colgante para ${size}`, supColgante, 'un', 0, surface); document.getElementById('tray-sup-colgante').value = 0; itemAdded = true; }
+                
+                if (units > 0) calculateTrayMeters();
             }
 
             // CAJAS DE PASO
